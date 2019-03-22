@@ -1,0 +1,85 @@
+@using BELTEXAM.Models;
+@model Event;
+@{
+ViewData["Title"] = "Create Activity";
+}
+
+@{
+ViewData["Title"] = "Home Page";
+}
+
+<div class="container">
+    <nav class="navbar fixed-top navbar-light bg-light">
+        <div class="col">
+            <span class="navbar-brand mb-0 h1">
+                <h1>Dojo Activity Center</h1>
+            </span>
+        </div>
+        <div class="col-2">
+            <a href="/home"><button class="btn btn-primary btn-sm">Dashboard</button></a>
+            <a href="/logout"><button class="btn btn-danger btn-sm">Log off</button></a>
+        </div>
+    </nav>
+    <div class="row">
+        <div class="col"></div>
+        <div class="col-6"> <br> <br>
+            <h2>Create an activity!</h2>
+            <form asp-controller="Home" asp-aciton="NewEvent" method="POST">
+                <div>
+                    <label asp-for="Title"></label>
+                    <input class="form-control" asp-for="Title">
+                    <b>
+                        <span asp-validation-for="Title" class="text-danger"></span>
+                    </b>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label asp-for="DateOfEvent"></label>
+                        <input class="form-control" type="date" asp-for="DateOfEvent">
+                        <b>
+                            <span asp-validation-for="DateOfEvent" class="text-danger"></span>
+                        </b>
+                    </div>
+                    <div class="col">
+                        <label asp-for="Time"></label>
+                        <input class="form-control" asp-for="Time">
+                        <b>
+                            <span asp-validation-for="Time" class="text-danger"></span>
+                        </b>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label asp-for="Duration"></label>
+                        <input class="form-control" type="number" min="1" asp-for="Duration">
+                        <b>
+                            <span asp-validation-for="Duration" class="text-danger"></span>
+                        </b>
+                    </div>
+                    <div class="col">
+                        <label asp-for="DurationUnit"></label>
+                        <select class="form-control" asp-for="DurationUnit">
+                            <option value=""></option>
+                            <option value="Days">Days</option>
+                            <option value="Hours">Hours</option>
+                            <option value="Minutes">Minutes</option>
+                        </select>
+                        <b>
+                            <span asp-validation-for="DurationUnit" class="text-danger"></span>
+                        </b>
+                    </div>
+                </div>
+                <div>
+                    <label asp-for="Description"></label>
+                    <textarea class="form-control" asp-for="Description" rows="5"></textarea>
+                    <b>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </b>
+                </div>
+                <br>
+                <input type="submit" value="Create Activity" class="btn btn-primary">
+            </form>
+        </div>
+        <div class="col"></div>
+    </div>
+</div>

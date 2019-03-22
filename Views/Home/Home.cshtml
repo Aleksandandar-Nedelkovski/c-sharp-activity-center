@@ -1,0 +1,91 @@
+@model User
+@using Microsoft.AspNetCore.Http;
+@{
+ViewData["Title"] = "Dashboard";
+}
+
+<div class="container">
+    <nav class="navbar fixed-top navbar-light bg-light">
+        <div class="col">
+            <span class="navbar-brand mb-0 h1">
+                <h1>Dojo Activity Center</h1>
+            </span>
+        </div>
+        <div class="col-2">
+            <h5>Welcome, @Model.FirstName</h5>
+        </div>
+        <div class="col-2"><a href="/logout"><button class="btn btn-danger btn-sm">Log off</button></a></div>
+    </nav>
+    <div class="row">
+        <div class="col"> <br> <br>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Activity</th>
+                        <th scope="col">Date and Time</th>
+                        <th scope="col">Duration</th>
+                        <th scope="col">Event Coordinator</th>
+                        <th scope="col">Participants</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                    int? seshUser = @Context.Session.GetInt32("ID");
+                    bool booked = false;
+                    foreach(var x in ViewBag.Events)
+                    {
+                    <tr>
+                        <th scope="row"><a href="activity/@x.ID">@x.Title</a></th>
+                        <td>@x.DateOfEvent.ToString("MM/dd") at @x.Time.TimeOfDay </td>
+                        <td>@x.Duration @x.DurationUnit</td>
+                        <td>@x.Coordinator.FirstName</td>
+                        <td>@x.Participants.Count</td>
+                        @if(x.CoordinatorID == (int)seshUser)
+                        {
+                        <td><a href="/delete/@x.ID"><button class="btn btn-danger btn-sm">Call it off!</button></a></td>
+                        }
+                        @if(x.CoordinatorID != (int)seshUser)
+                        {
+                        bool going = false;
+                        foreach(var part in x.Participants)
+                        {
+                        if(part.User.ID == (int)seshUser)
+                        {
+                        going = true;
+                        }
+                        }
+                        if(going)
+                        {
+                        <td><a href="/UnRsvp/@x.ID"><button class="btn btn-danger btn-sm">Leave Event</button></a></td>
+                        }
+                        else
+                        {
+                        foreach(var part in ViewBag.EventsWithConflicts)
+                        {
+                        if(part.Event.DateOfEvent == x.DateOfEvent)
+                        {
+                        booked = true;
+                        }
+                        }
+                        if(!booked)
+                        {
+                        <td><a href="/Rsvp/@x.ID"><button class="btn btn-success btn-sm">Join Event</button></a></td>
+                        }
+                        else
+                        {
+                        <td><button class="btn btn-danger btn-sm" disabled> You're booked!</button></td>
+                        }
+                        }
+                        }
+                    </tr>
+                    }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<a href="newEvent"><button class="btn btn-success">Add New Activity!</button></a>
